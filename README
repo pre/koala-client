@@ -1,0 +1,52 @@
+Koala-client authentication plugin for Lintuvaara
+=================================================
+
+Authentication client for Lintuvaara services.
+
+Plugin structure is copied from Clearance.
+
+Warranty "as is", no tests (zero failures).
+
+
+Installation
+============
+
+Install gem "hpricot".
+
+Copy Lintuvaara public_key to config/.
+
+Insert the following lines at the beginning of ApplicationController:
+  include KoalaClient::Authentication
+  before_filter :authentication_required
+  before_filter :update_session_expiry
+
+Insert the following lines at the beginning of routes.rb:
+  KoalaClient::Routes.draw(map)
+  map.root :controller => 'your_root_controller', :action => 'index'
+
+Add the following initializers:
+  koala_authentication config
+  000_lintuvaara_api.rb (needs to be loaded first, therefore "000")
+  koala_client.rb       (modify settings if necessary)
+
+Implement the following abstract methods:
+
+  ApplicationController#access_granted?
+  - Should return true if current user has an authenticated session (session[:user]) 
+    and is of allowed user type 
+  - Example: 
+    session[:user] and session[:user_type] == "admin"
+  
+  ApplicationController#correct_user_type?
+  - Should return true if current user classification is ok 
+  - For example return false if a non-admin user is trying to access admin functions
+    or ["rengastaja", "maallikko", "rengastuskeskus"].include?(session[:user_type])
+    
+  ApplicationController#set_user_variable
+  - Should set @user 
+  - User's login_id is strored in session[:user]
+  - TODO: Refactor this to current_user, should not access @user directly
+
+
+
+Copyright (c) 2010 Petrus Repo, released under the MIT license

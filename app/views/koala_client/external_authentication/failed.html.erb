@@ -1,0 +1,19 @@
+<h1><%= translate(:page_title,
+            :scope   => [:koala_client, :external_authentication, :failed],
+            :default => "Service authorization failed") %></h1>
+
+<p>
+  <%= translate(:fail_description,
+            :scope   => [:koala_client, :external_authentication, :failed],
+            :default => "Your user account is not authorized to access the requested service.") %>
+</p>
+
+<p>
+	&laquo; <%= link_to translate(:return,
+	                      :scope   => [:koala_client, :external_authentication, :failed],
+	                      :default => "Return to Lintuvaara"), 
+	              KoalaClient.configuration.server_url %> 
+	              <%= translate(:and_try_again,
+	                      :scope   => [:koala_client, :external_authentication, :failed],
+	                      :default => "and try again.") %>
+</p>
