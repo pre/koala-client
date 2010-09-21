@@ -52,7 +52,7 @@ Implement the following abstract methods:
     
   ApplicationController#set_user_variable
   - Should set @user 
-  - User's login_id is strored in session[:user]
+  - You may access user's login_id at session[:user]
   - Example:
     def set_user_variable
       @user = {:name => "Lol Cat", :email => "long@lol.cat"}
@@ -62,7 +62,7 @@ Implement the following abstract methods:
 
 
 Configure your Lintuvaara development environment:
-  Add to your service to Lintuvaara's config/initializers/lintuvaara.rb:
+  Add your service to Lintuvaara's config/initializers/lintuvaara.rb:
     :pulu => {
       :name => "KoalaClient test service",
       :allowed_for => ["AdminUser", "User::Rengastaja"],
