@@ -11,6 +11,9 @@ Warranty "as is", no tests (zero failures).
 Installation
 ============
 
+Install this plugin:
+  script/plugin install git://github.com/pre/koala-client.git
+  
 Install gem "hpricot".
 
 Copy Lintuvaara public_key to config/.
@@ -33,19 +36,41 @@ Implement the following abstract methods:
   ApplicationController#access_granted?
   - Should return true if current user has an authenticated session (session[:user]) 
     and is of allowed user type 
-  - Example: 
-    session[:user] and session[:user_type] == "admin"
+  - Example:
+    def access_granted?
+      session[:user] and session[:user_type] == "admin"
+    end
   
   ApplicationController#correct_user_type?
   - Should return true if current user classification is ok 
   - For example return false if a non-admin user is trying to access admin functions
-    or ["rengastaja", "maallikko", "rengastuskeskus"].include?(session[:user_type])
+    or check that current user is of specified types.
+  - Example: 
+    def correct_user_type?
+      ["rengastaja", "maallikko", "rengastuskeskus"].include?(session[:user_type])
+    end
     
   ApplicationController#set_user_variable
   - Should set @user 
   - User's login_id is strored in session[:user]
+  - Example:
+    def set_user_variable
+      @user = {:name => "Lol Cat", :email => "long@lol.cat"}
+    end
+    
   - TODO: Refactor this to current_user, should not access @user directly
 
+
+Configure your Lintuvaara development environment:
+  Add to your service to Lintuvaara's config/initializers/lintuvaara.rb:
+    :pulu => {
+      :name => "KoalaClient test service",
+      :allowed_for => ["AdminUser", "User::Rengastaja"],
+      :url => "http://lv.local/pulu/external_authentication/new"
+    }
+
+  Ensure that the previous 'name' matches the one you defined in your
+  000_lintuvaara_api.rb's api_account.
 
 
 Copyright (c) 2010 Petrus Repo, released under the MIT license
