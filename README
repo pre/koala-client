@@ -24,8 +24,7 @@ Insert the following lines at the beginning of routes.rb:
   KoalaClient::Routes.draw(map)
   map.root :controller => 'your_root_controller', :action => 'index'
 
-Add the following initializers:
-  koala_authentication config
+Copy the following from sample_initializers to config/initializers:
   000_lintuvaara_api.rb (needs to be loaded first, therefore "000")
   koala_client.rb       (modify settings if necessary)
 
