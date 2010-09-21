@@ -35,10 +35,10 @@ Implement the following abstract methods:
 
   ApplicationController#access_granted?
   - Should return true if current user has an authenticated session (session[:user]) 
-    and is of allowed user type 
+  - You may optionally also check that user is of allowed class
   - Example:
     def access_granted?
-      session[:user] and session[:user_type] == "admin"
+      session[:user]
     end
   
   ApplicationController#correct_user_type?
