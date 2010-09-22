@@ -31,6 +31,14 @@ Copy the following from sample_initializers to config/initializers:
   000_lintuvaara_api.rb (needs to be loaded first, therefore "000")
   koala_client.rb       (modify settings if necessary)
 
+Create models/external_user.rb as follows:
+  class ExternalUser < ActiveResource::Base
+    include KoalaClient::ExternalUser
+    self.site     = Lintuvaara::ApiConfig::SERVER_API_ADDRESS
+    self.user     = Lintuvaara::ApiConfig::SERVER_ACCOUNT
+    self.password = Lintuvaara::ApiConfig::SERVER_PASSWORD  
+  end
+  
 Implement the following abstract methods:
 
   ApplicationController#access_granted?
@@ -50,12 +58,13 @@ Implement the following abstract methods:
       ["rengastaja", "maallikko", "rengastuskeskus"].include?(session[:user_type])
     end
     
+  OPTIONAL:
   ApplicationController#set_user_variable
-  - Should set @user 
-  - You may access user's login_id at session[:user]
+  - By default method sets @user from Lintuvaara HTTP API.
+  - You may optionally override this functionality.
   - Example:
     def set_user_variable
-      @user = {:name => "Lol Cat", :email => "long@lol.cat"}
+      @user = {:login_id => session[:user], :type => session[:user_type]}
     end
     
   - TODO: Refactor this to current_user, should not access @user directly
@@ -64,13 +73,14 @@ Implement the following abstract methods:
 Configure your Lintuvaara development environment:
   Add your service to Lintuvaara's config/initializers/lintuvaara.rb:
     :pulu => {
-      :name => "KoalaClient test service",
-      :allowed_for => ["AdminUser", "User::Rengastaja"],
-      :url => "http://lv.local/pulu/external_authentication/new"
+      :name         => "KoalaClient test service",
+      :allowed_for  => ["AdminUser", "User::Rengastaja"],
+      :url          => "http://lv.local/pulu/external_authentication/new",
+      :api_password => "youwillneverguessthispassword"
     }
 
-  Ensure that the previous 'name' matches the one you defined in your
-  000_lintuvaara_api.rb's api_account.
+  Ensure that the previous 'name' and 'api_password' match with your definition
+  in 000_lintuvaara_api.rb.
 
 
 Copyright (c) 2010 Petrus Repo, released under the MIT license

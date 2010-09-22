@@ -45,7 +45,7 @@ module KoalaClient
       end    
 
       def set_user_variable    
-        raise NotImplementedError.new("Implement #set_user_variable which sets @user -- user info is strored in session[:user].")
+        @user = ExternalUser.find(session[:user])
       end
 
       # Redirects user to Lintuvaara for authentication. 

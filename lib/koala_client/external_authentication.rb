@@ -23,6 +23,7 @@ class KoalaClient::ExternalAuthentication
   end
 
   def auth_for_me?
+    Rails.logger.debug("My API account: #{KoalaClient.configuration.api_account}, XML auth_for: #{self.auth_for}")
     KoalaClient.configuration.api_account == self.auth_for
   end
   
